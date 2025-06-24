@@ -9,7 +9,10 @@ MODEL_PRE = 'CASIA_B512_'
 
 
 CASIA_DATA_DIR = '/home/xiaocc/Documents/caffe_project/sphereface/train/data'
-LFW_DATA_DIR = '/home/xiaocc/Documents/caffe_project/sphereface/test/data'
+# Directory containing the LFW evaluation data. By default use the mounted
+# /data directory so the evaluation script can locate the dataset without
+# additional configuration.
+LFW_DATA_DIR = '/data'
 
 GPU = 0, 1
 

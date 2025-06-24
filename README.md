@@ -18,7 +18,9 @@
 
 ### Part 2: Train
 
-  1. Change the **CAISIA_DATA_DIR** and **LFW_DATA_DAR** in `config.py` to your data path.
+  1. Change the **CAISIA_DATA_DIR** and **LFW_DATA_DIR** in `config.py` to your data path if needed.
+     The repository now defaults `LFW_DATA_DIR` to `/data` so the evaluation
+     scripts can find the dataset mounted at that location.
   
   2. Train the mobilefacenet model. 
   
