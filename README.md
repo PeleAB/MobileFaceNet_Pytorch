@@ -64,6 +64,14 @@ quantized format.
        --dataset path/to/calibration_set --output mobilefacenet_int8.onnx
    ```
 
+3. **prepare_lfw_npz.py** – loads the bundled LFW sample images using
+   Keras and saves them as `lfw_test_data.npz`. This file can be used as
+   representative data when quantizing models.
+
+   ```bash
+   python3 prepare_lfw_npz.py
+   ```
+
 ## Results
 
   * You can just run the `lfw_eval.py` to get the result, the accuracy on LFW like this:
