@@ -18,7 +18,9 @@
 
 ### Part 2: Train
 
-  1. Change the **CAISIA_DATA_DIR** and **LFW_DATA_DAR** in `config.py` to your data path.
+  1. Change the **CAISIA_DATA_DIR** and **LFW_DATA_DIR** in `config.py` to your data path if needed.
+     The repository now defaults `LFW_DATA_DIR` to `/data` so the evaluation
+     scripts can find the dataset mounted at that location.
   
   2. Train the mobilefacenet model. 
   
@@ -38,6 +40,29 @@
       ```
       * `--resume:` path of saved model
       * `--feature_save_dir:` path to save the extracted features (must be .mat file)
+
+### Part 4: Quantization
+
+Two helper scripts are provided for converting the trained model to a fully
+quantized format.
+
+1. **export_quantized.py** – converts a training checkpoint to an int8 ONNX
+   model and a fully quantized TFLite model:
+
+   ```bash
+   python3 export_quantized.py --checkpoint path/to/checkpoint.pth \
+       --onnx_out mobilefacenet_int8.onnx --tflite_out mobilefacenet_int8.tflite
+   ```
+
+2. **quantize_onnx.py** – performs post training static quantization on an
+   existing FP32 ONNX model. Pass `--dataset` to provide a calibration dataset
+   (folder with sub‑directories for each class). If omitted, random data will be
+   used for calibration.
+
+   ```bash
+   python3 quantize_onnx.py --input mobilefacenet.onnx \
+       --dataset path/to/calibration_set --output mobilefacenet_int8.onnx
+   ```
 
 ## Results
 

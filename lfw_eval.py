@@ -14,30 +14,41 @@ from config import LFW_DATA_DIR
 import argparse
 
 def parseList(root):
-    with open(os.path.join(root, 'pairs.txt')) as f:
-        pairs = f.read().splitlines()[1:]
+    pairs_path = os.path.join(root, 'pairs.txt')
+    with open(pairs_path) as f:
+        pairs = f.read().splitlines()
+
+    # remove header if present
+    if pairs and pairs[0].lower().startswith('name'):
+        pairs = pairs[1:]
+
     folder_name = 'lfw-112X96'
+    if not os.path.isdir(os.path.join(root, folder_name)):
+        alt = os.path.join(root, 'lfw-deepfunneled', 'lfw-deepfunneled')
+        if os.path.isdir(alt):
+            folder_name = os.path.join('lfw-deepfunneled', 'lfw-deepfunneled')
+
     nameLs = []
     nameRs = []
     folds = []
     flags = []
     for i, p in enumerate(pairs):
-        p = p.split('\t')
+        p = p.replace(',', ' ').split()
+        if len(p) < 3:
+            continue
         if len(p) == 3:
-            nameL = os.path.join(root, folder_name, p[0], p[0] + '_' + '{:04}.jpg'.format(int(p[1])))
-            nameR = os.path.join(root, folder_name, p[0], p[0] + '_' + '{:04}.jpg'.format(int(p[2])))
-            fold = i // 600
+            nameL = os.path.join(root, folder_name, p[0], f'{p[0]}_{int(p[1]):04}.jpg')
+            nameR = os.path.join(root, folder_name, p[0], f'{p[0]}_{int(p[2]):04}.jpg')
             flag = 1
-        elif len(p) == 4:
-            nameL = os.path.join(root, folder_name, p[0], p[0] + '_' + '{:04}.jpg'.format(int(p[1])))
-            nameR = os.path.join(root, folder_name, p[2], p[2] + '_' + '{:04}.jpg'.format(int(p[3])))
-            fold = i // 600
+        else:
+            nameL = os.path.join(root, folder_name, p[0], f'{p[0]}_{int(p[1]):04}.jpg')
+            nameR = os.path.join(root, folder_name, p[2], f'{p[2]}_{int(p[3]):04}.jpg')
             flag = -1
+        fold = i // 600
         nameLs.append(nameL)
         nameRs.append(nameR)
         folds.append(fold)
         flags.append(flag)
-    # print(nameLs)
     return [nameLs, nameRs, folds, flags]
 
 
